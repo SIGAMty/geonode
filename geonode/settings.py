@@ -28,6 +28,10 @@ from schema import Optional
 from datetime import timedelta
 from distutils.util import strtobool  # noqa
 from urllib.parse import urlparse, urljoin
+import environ
+
+env = environ.Env()
+env.read_env()
 
 #
 # General Django development settings
@@ -53,13 +57,18 @@ VERSION = get_version()
 
 DEFAULT_CHARSET = "utf-8"
 
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
 # Defines the directory that contains the settings file as the PROJECT_ROOT
 # It is used for relative settings elsewhere.
 PROJECT_ROOT = os.path.abspath(os.path.dirname(__file__))
+print("PROJECT_ROOT", PROJECT_ROOT)
+print("BASE_DIR", BASE_DIR)
 
 # Setting debug to true makes Django serve static media and
 # present pretty error pages.
 DEBUG = ast.literal_eval(os.getenv('DEBUG', 'True'))
+print("DEBUG", DEBUG)
 
 # Set to True to load non-minified versions of (static) client dependencies
 # Requires to set-up Node and tools that are required for static development
@@ -288,7 +297,8 @@ THUMBNAIL_LOCATION = 'thumbs'
 
 # Absolute path to the directory that holds media.
 # Example: "/home/media/media.lawrence.com/"
-MEDIA_ROOT = os.getenv('MEDIA_ROOT', os.path.join(PROJECT_ROOT, MEDIAFILES_LOCATION))
+# MEDIA_ROOT = os.getenv('MEDIA_ROOT', os.path.join(PROJECT_ROOT, MEDIAFILES_LOCATION))
+MEDIA_ROOT = os.getenv('MEDIA_ROOT', os.path.join(BASE_DIR, MEDIAFILES_LOCATION))
 
 # URL that handles the media served from MEDIA_ROOT. Make sure to use a
 # trailing slash if there is a path component (optional in other cases).
@@ -299,8 +309,10 @@ LOCAL_MEDIA_URL = os.getenv('LOCAL_MEDIA_URL', f'{FORCE_SCRIPT_NAME}/{MEDIAFILES
 # Absolute path to the directory that holds static files like app media.
 # Example: "/home/media/media.lawrence.com/apps/"
 STATIC_ROOT = os.getenv('STATIC_ROOT',
-                        os.path.join(PROJECT_ROOT, 'static_root')
+                        os.path.join(BASE_DIR, 'static')
                         )
+
+STATIC_URL = "/static/"
 
 # Cache Bustin Settings: enable WhiteNoise compression and caching support
 # ref: http://whitenoise.evans.io/en/stable/django.html#add-compression-and-caching-support
@@ -322,7 +334,12 @@ _DEFAULT_STATICFILES_DIRS = [
     os.path.join(PROJECT_ROOT, STATICFILES_LOCATION),
 ]
 
-STATICFILES_DIRS = os.getenv('STATICFILES_DIRS', _DEFAULT_STATICFILES_DIRS)
+# STATICFILES_DIRS = os.getenv('STATICFILES_DIRS', _DEFAULT_STATICFILES_DIRS)
+STATICFILES_DIRS = [
+    os.path.join(PROJECT_ROOT, "static"),
+]
+
+print("STATICFILES_DIRS", STATICFILES_DIRS)
 
 # List of finder classes that know how to find static files in
 # various locations.
@@ -519,6 +536,8 @@ INSTALLED_APPS = (
     'allauth',
     'allauth.account',
     'allauth.socialaccount',
+    "allauth.socialaccount.providers.keycloak",
+    # "allauth.socialaccount.providers.openid",
 
     # GeoNode
     'geonode',
@@ -823,7 +842,7 @@ OAUTH2_PROVIDER = {
     # 'OAUTH2_VALIDATOR_CLASS': 'geonode.security.oauth2_validators.OIDCValidator',
 
     # OpenID Connect
-    "OIDC_ENABLED": True,
+    "OIDC_ENABLED": False,
     "OIDC_ISS_ENDPOINT": SITEURL,
     "OIDC_USERINFO_ENDPOINT": f"{SITEURL}api/o/v4/tokeninfo/",
     "OIDC_RSA_PRIVATE_KEY": """-----BEGIN RSA PRIVATE KEY-----
@@ -1950,44 +1969,17 @@ SOCIALACCOUNT_WITH_GEONODE_LOCAL_SINGUP = strtobool(os.environ.get('SOCIALACCOUN
 # )
 
 SOCIALACCOUNT_PROVIDERS = {
-    'linkedin_oauth2': {
-        'SCOPE': [
-            'r_emailaddress',
-            'r_liteprofile',
-        ],
-        'PROFILE_FIELDS': [
-            'id',
-            'email-address',
-            'first-name',
-            'last-name',
-            'picture-url',
-            'public-profile-url',
-        ]
-    },
-    'facebook': {
-        'METHOD': 'oauth2',
-        'SCOPE': [
-            'email',
-            'public_profile',
-        ],
-        'FIELDS': [
-            'id',
-            'email',
-            'name',
-            'first_name',
-            'last_name',
-            'verified',
-            'locale',
-            'timezone',
-            'link',
-            'gender',
-        ]
+    'keycloak': {
+        'KEYCLOAK_URL': 'http://iam.monterrey.gob.mx',
+        'KEYCLOAK_REALM': 'id.monterrey.gob.mx'
     },
 }
 
 SOCIALACCOUNT_PROFILE_EXTRACTORS = {
-    "facebook": "geonode.people.profileextractors.FacebookExtractor",
-    "linkedin_oauth2": "geonode.people.profileextractors.LinkedInExtractor",
+    #"facebook": "geonode.people.profileextractors.FacebookExtractor",
+    #"linkedin_oauth2": "geonode.people.profileextractors.LinkedInExtractor",
+    "keycloak": "geonode.people.profileextractors.OpenIDExtractor",
+    # "openid": "geonode.people.profileextractors.OpenIDExtractor",
 }
 
 INVITATIONS_ADAPTER = ACCOUNT_ADAPTER
@@ -2089,7 +2081,7 @@ if MONITORING_ENABLED:
 USER_ANALYTICS_ENABLED = ast.literal_eval(os.getenv('USER_ANALYTICS_ENABLED', 'False'))
 USER_ANALYTICS_GZIP = ast.literal_eval(os.getenv('USER_ANALYTICS_GZIP', 'False'))
 
-GEOIP_PATH = os.getenv('GEOIP_PATH', os.path.join(PROJECT_ROOT, 'GeoIPCities.dat'))
+GEOIP_PATH = os.getenv('GEOIP_PATH', os.path.join(BASE_DIR, 'GeoIPCities.dat'))
 # This controls if tastypie search on resourches is performed only with titles
 SEARCH_RESOURCES_EXTENDED = strtobool(os.getenv('SEARCH_RESOURCES_EXTENDED', 'True'))
 # -- END Settings for MONITORING plugin
