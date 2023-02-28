@@ -31,7 +31,7 @@
           <div class="form-group">
               <form action="{% provider_login_url provider.id process=process scope=scope auth_params=auth_params %}" method="post">
 		{% csrf_token %}
-                <input type="submit" value="Conectar con ID Monterrey" />
+                <input class="btn btn-default btn-block" type="submit" value="Conectar con ID Monterrey" />
               </form>
           </div>
         {% endif %}
