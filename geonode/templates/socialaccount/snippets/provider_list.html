@@ -5,15 +5,18 @@
 {% get_providers as socialaccount_providers %}
 
 {% for provider in socialaccount_providers %}
-        {% if provider.id == "openid" %}
-            {% for brand in provider.get_brands %}
-                <a class="list-group-item" title="{{brand.name}}" href="{% provider_login_url provider.id openid=brand.openid_url process=process %}">
-                    {{brand.name}}
-                </a>
-            {% endfor %}
-        {% endif %}
+    {% if provider.id == "openid" %}
+        {% for brand in provider.get_brands %}
+            <a class="list-group-item" title="{{ brand.name }}"
+               href="{% provider_login_url provider.id openid=brand.openid_url process=process %}">
+                {{ brand.name }}
+            </a>
+        {% endfor %}
+    {% endif %}
+    {% if provider.id != "keycloak" %}
         <div class="form-group">
-            <a class="btn btn-default btn-block" title="{{provider.name}}" href="{% provider_login_url provider.id process=process scope=scope auth_params=auth_params %}">
+            <a class="btn btn-default btn-block" title="{{ provider.name }}"
+               href="{% provider_login_url provider.id process=process scope=scope auth_params=auth_params %}">
                 <i class="fa fa-{{ provider.name|lower }}-square fa-2x" aria-hidden="true"></i>
                 {% if process == "login" %}
                     {% trans "Sign in with" %}
@@ -22,7 +25,17 @@
                 {% else %}
                     {% trans "Sign up with" %}
                 {% endif %}
-                {{provider.name}}
+                {{ provider.name }}
             </a>
         </div>
+    {% endif %}
+    {% if provider.id == "keycloak" %}
+        <div class="form-group">
+            <form action="{% provider_login_url provider.id process=process scope=scope auth_params=auth_params %}"
+                  method="post">
+                {% csrf_token %}
+                <input class="btn btn-default btn-block" type="submit" value="Conectar con monterrey.gob.mx"/>
+            </form>
+        </div>
+    {% endif %}
 {% endfor %}

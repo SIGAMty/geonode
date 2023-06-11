@@ -38,6 +38,10 @@ from kombu import Queue, Exchange
 from kombu.serialization import register
 
 from . import serializer
+import environ
+
+env = environ.Env()
+env.read_env()
 
 SILENCED_SYSTEM_CHECKS = [
     "1_8.W001",
@@ -502,6 +506,7 @@ INSTALLED_APPS = (
     "allauth",
     "allauth.account",
     "allauth.socialaccount",
+    "allauth.socialaccount.providers.keycloak",
     # GeoNode
     "geonode",
 )
@@ -859,7 +864,7 @@ OAUTH2_PROVIDER = {
     "OAUTH2_SERVER_CLASS": "geonode.security.oauth2_servers.OIDCServer",
     # 'OAUTH2_VALIDATOR_CLASS': 'geonode.security.oauth2_validators.OIDCValidator',
     # OpenID Connect
-    "OIDC_ENABLED": True,
+    "OIDC_ENABLED": False,
     "OIDC_ISS_ENDPOINT": SITEURL,
     "OIDC_USERINFO_ENDPOINT": f"{SITEURL}api/o/v4/tokeninfo/",
     "OIDC_RSA_PRIVATE_KEY": """-----BEGIN RSA PRIVATE KEY-----
@@ -1967,7 +1972,7 @@ SOCIALACCOUNT_WITH_GEONODE_LOCAL_SINGUP = strtobool(os.environ.get("SOCIALACCOUN
 #    'allauth.socialaccount.providers.facebook',
 # )
 
-SOCIALACCOUNT_PROVIDERS = {
+SOCIALACCOUNT_PROVIDERS_O = {
     "linkedin_oauth2": {
         "SCOPE": [
             "r_emailaddress",
@@ -2003,9 +2008,17 @@ SOCIALACCOUNT_PROVIDERS = {
     },
 }
 
+SOCIALACCOUNT_PROVIDERS = {
+    'keycloak': {
+        'KEYCLOAK_URL': 'http://iam.monterrey.gob.mx',
+        'KEYCLOAK_REALM': 'id.monterrey.gob.mx'
+    },
+}
+
 SOCIALACCOUNT_PROFILE_EXTRACTORS = {
-    "facebook": "geonode.people.profileextractors.FacebookExtractor",
-    "linkedin_oauth2": "geonode.people.profileextractors.LinkedInExtractor",
+    # "facebook": "geonode.people.profileextractors.FacebookExtractor",
+    # "linkedin_oauth2": "geonode.people.profileextractors.LinkedInExtractor",
+    "keycloak": "geonode.people.profileextractors.OpenIDExtractor",
 }
 
 INVITATIONS_ADAPTER = ACCOUNT_ADAPTER
