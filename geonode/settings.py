@@ -56,6 +56,7 @@ DEFAULT_CHARSET = "utf-8"
 # Defines the directory that contains the settings file as the PROJECT_ROOT
 # It is used for relative settings elsewhere.
 PROJECT_ROOT = os.path.abspath(os.path.dirname(__file__))
+print(f"PROJECT_ROOT: {PROJECT_ROOT}")
 
 # Setting debug to true makes Django serve static media and
 # present pretty error pages.
@@ -147,24 +148,14 @@ if "postgresql" in DATABASE_URL or "postgis" in DATABASE_URL:
 DATABASES = {"default": _db_conf}
 
 if os.getenv("DEFAULT_BACKEND_DATASTORE"):
-    GEODATABASE_URL = os.getenv(
-        "GEODATABASE_URL",
-        "postgis://\
-geonode_data:geonode_data@localhost:5432/geonode_data",
-    )
-    DATABASES[os.getenv("DEFAULT_BACKEND_DATASTORE")] = dj_database_url.parse(
-        GEODATABASE_URL, conn_max_age=GEONODE_DB_CONN_MAX_AGE
-    )
+    GEODATABASE_URL = os.getenv("GEODATABASE_URL", "postgis://geonode_data:geonode_data@localhost:5432/geonode_data",)
+    DATABASES[os.getenv("DEFAULT_BACKEND_DATASTORE")] = dj_database_url.parse(GEODATABASE_URL, conn_max_age=GEONODE_DB_CONN_MAX_AGE)
     _geo_db = DATABASES[os.getenv("DEFAULT_BACKEND_DATASTORE")]
     if "CONN_TOUT" in DATABASES["default"]:
         _geo_db["CONN_TOUT"] = DATABASES["default"]["CONN_TOUT"]
     if "postgresql" in GEODATABASE_URL or "postgis" in GEODATABASE_URL:
         _geo_db["OPTIONS"] = DATABASES["default"]["OPTIONS"] if "OPTIONS" in DATABASES["default"] else {}
-        _geo_db["OPTIONS"].update(
-            {
-                "connect_timeout": GEONODE_DB_CONN_TOUT,
-            }
-        )
+        _geo_db["OPTIONS"].update({"connect_timeout": GEONODE_DB_CONN_TOUT,})
 
     DATABASES[os.getenv("DEFAULT_BACKEND_DATASTORE")] = _geo_db
 
@@ -268,7 +259,7 @@ PASSWORD_HASHERS = [
 MODELTRANSLATION_LANGUAGES = [
     "en",
 ]
-MODELTRANSLATION_DEFAULT_LANGUAGE = "en"
+MODELTRANSLATION_DEFAULT_LANGUAGE = "es"
 MODELTRANSLATION_FALLBACK_LANGUAGES = ("en",)
 
 # Location of translation files
@@ -315,6 +306,8 @@ if FORCE_SCRIPT_NAME:
     STATIC_URL = f"{STATIC_HOST}/{FORCE_SCRIPT_NAME}/{STATICFILES_LOCATION}/"
 else:
     STATIC_URL = f"{STATIC_HOST}/{STATICFILES_LOCATION}/"
+
+STATIC_URL = "/static/"
 
 # Additional directories which hold static files
 _DEFAULT_STATICFILES_DIRS = [
@@ -502,6 +495,7 @@ INSTALLED_APPS = (
     "allauth",
     "allauth.account",
     "allauth.socialaccount",
+    "allauth.socialaccount.providers.keycloak",
     # GeoNode
     "geonode",
 )
@@ -516,6 +510,10 @@ markdown_white_listed_tags = [
     "h5",
     "h6",
     "h7",
+    "br",
+    "em",
+    "hr",
+    "ol",
     "ul",
     "li",
     "span",
@@ -587,7 +585,7 @@ DYNAMIC_REST = {
     "ENABLE_HOST_RELATIVE_LINKS": True,
 }
 
-GRAPPELLI_ADMIN_TITLE = os.getenv("GRAPPELLI_ADMIN_TITLE", "GeoNode")
+GRAPPELLI_ADMIN_TITLE = os.getenv("GRAPPELLI_ADMIN_TITLE", "GeoNode Monterrey")
 
 # Documents application
 try:
@@ -1051,7 +1049,7 @@ OGC_SERVER = {
 USE_GEOSERVER = "geonode.geoserver" in INSTALLED_APPS and OGC_SERVER["default"]["BACKEND"] == "geonode.geoserver"
 
 # Uploader Settings
-DATA_UPLOAD_MAX_NUMBER_FIELDS = 100000
+DATA_UPLOAD_MAX_NUMBER_FIELDS = 300000
 """
     DEFAULT_BACKEND_UPLOADER = {'geonode.importer'}
 """
@@ -1065,13 +1063,14 @@ UPLOADER = {
     "SUPPORTED_EXT": [".shp", ".csv", ".kml", ".kmz", ".json", ".geojson", ".tif", ".tiff", ".geotiff", ".gml", ".xml"],
 }
 
+# "EPSG:3785": "(3785 DEPRECATED) Popular Visualisation CRS / Mercator",
+# "EPSG:32647": "(32647) WGS 84 / UTM zone 47N",
+# "EPSG:32736": "(32736) WGS 84 / UTM zone 36S",
+
 EPSG_CODE_MATCHES = {
     "EPSG:4326": "(4326) WGS 84",
-    "EPSG:900913": "(900913) Google Maps Global Mercator",
     "EPSG:3857": "(3857) WGS 84 / Pseudo-Mercator",
-    "EPSG:3785": "(3785 DEPRECATED) Popular Visualisation CRS / Mercator",
-    "EPSG:32647": "(32647) WGS 84 / UTM zone 47N",
-    "EPSG:32736": "(32736) WGS 84 / UTM zone 36S",
+    "EPSG:32614": "(32614) WGS 84 / UTM zone 14N",
 }
 
 # CSW settings
@@ -1177,7 +1176,7 @@ SOCIAL_ORIGINS = [
 CKAN_ORIGINS = [
     {
         "label": "Humanitarian Data Exchange (HDX)",
-        "url": "https://data.hdx.rwlabs.org/dataset/new?title={name}&"
+        "url": "https://datos.monterrey.gob.mx/dataset/new?title={name}&"
         "dataset_date={date}&notes={abstract}&caveats={caveats}",
         "css_class": "hdx",
     }
@@ -1200,7 +1199,7 @@ OPENGRAPH_ENABLED = ast.literal_eval(os.getenv("OPENGRAPH_ENABLED", "True"))
 # Metadata Options: verbose, light, never
 LICENSES = {
     "ENABLED": True,
-    "DETAIL": "above",
+    "DETAIL": "never",
     "METADATA": "verbose",
 }
 
