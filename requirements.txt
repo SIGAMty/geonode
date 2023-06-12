@@ -4,6 +4,7 @@ lxml==4.9.2
 psycopg2==2.9.6
 Django~=4.2.1
 environ
+django-storages
 
 # Other
 amqp==5.1.1
