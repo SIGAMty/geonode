@@ -495,7 +495,7 @@ INSTALLED_APPS = (
     "allauth",
     "allauth.account",
     "allauth.socialaccount",
-    "allauth.socialaccount.providers.keycloak",
+    # "allauth.socialaccount.providers.keycloak",
     # GeoNode
     "geonode",
 )
@@ -1956,9 +1956,9 @@ ACCOUNT_LOGIN_ATTEMPTS_LIMIT = int(os.getenv("ACCOUNT_LOGIN_ATTEMPTS_LIMIT", "3"
 ACCOUNT_MAX_EMAIL_ADDRESSES = int(os.getenv("ACCOUNT_MAX_EMAIL_ADDRESSES", "2"))
 
 SOCIALACCOUNT_ADAPTER = "geonode.people.adapters.SocialAccountAdapter"
-SOCIALACCOUNT_AUTO_SIGNUP = ast.literal_eval(os.environ.get("SOCIALACCOUNT_AUTO_SIGNUP", "True"))
+SOCIALACCOUNT_AUTO_SIGNUP = ast.literal_eval(os.environ.get("SOCIALACCOUNT_AUTO_SIGNUP", "False"))
 # This will hide or show local registration form in allauth view. True will show form
-SOCIALACCOUNT_WITH_GEONODE_LOCAL_SINGUP = strtobool(os.environ.get("SOCIALACCOUNT_WITH_GEONODE_LOCAL_SINGUP", "True"))
+SOCIALACCOUNT_WITH_GEONODE_LOCAL_SINGUP = strtobool(os.environ.get("SOCIALACCOUNT_WITH_GEONODE_LOCAL_SINGUP", "False"))
 
 # Uncomment this to enable Linkedin and Facebook login
 # INSTALLED_APPS += (
