@@ -60,7 +60,6 @@ DEFAULT_CHARSET = "utf-8"
 # Defines the directory that contains the settings file as the PROJECT_ROOT
 # It is used for relative settings elsewhere.
 PROJECT_ROOT = os.path.abspath(os.path.dirname(__file__))
-# print(f"PROJECT_ROOT: {PROJECT_ROOT}")
 
 # Setting debug to true makes Django serve static media and
 # present pretty error pages.
@@ -101,9 +100,6 @@ _default_siteurl = (
     else f"{SITE_HOST_SCHEMA}://{SITE_HOST_NAME}/"
 )
 SITEURL = os.getenv("SITEURL", _default_siteurl)
-print("SITEURL: ", SITEURL)
-print("SITE_HOST_SCHEMA: ", SITE_HOST_SCHEMA)
-
 
 # we need hostname for deployed
 _surl = urlparse(SITEURL)
@@ -1279,8 +1275,6 @@ except ValueError:
         if os.getenv("PROXY_ALLOWED_HOSTS") is None
         else re.split(r" *[,|:;] *", os.getenv("PROXY_ALLOWED_HOSTS"))
     )
-
-print("PROXY_ALLOWED_HOSTS: ", PROXY_ALLOWED_HOSTS)
 
 # The proxy to use when making cross origin requests.
 PROXY_URL = os.environ.get("PROXY_URL", "/proxy/?url=")
