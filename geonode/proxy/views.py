@@ -178,8 +178,8 @@ def proxy(
         query_separator = "&" if "?" in _url else "?"
         _url = f"{_url}{query_separator}access_token={access_token}"
 
-    print("body", request.body)
-    _data = request.body.decode("utf-8")
+    print("data", request.data)
+    _data = request.data # .body # .decode("utf-8")
 
 
     # Avoid translating local geoserver calls into external ones
