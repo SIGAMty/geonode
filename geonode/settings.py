@@ -92,7 +92,7 @@ else:
 _DEFAULT_SECRET_KEY = "myv-y4#7j-d*p-__@j#*3z@!y24fz8%^z2v6atuy4bo9vqr1_a"
 SECRET_KEY = os.getenv("SECRET_KEY", _DEFAULT_SECRET_KEY)
 
-SITE_HOST_SCHEMA = os.getenv("SITE_HOST_SCHEMA", "http")
+SITE_HOST_SCHEMA = os.getenv("SITE_HOST_SCHEMA", "https")
 SITE_HOST_NAME = os.getenv("SITE_HOST_NAME", "localhost")
 SITE_HOST_PORT = os.getenv("SITE_HOST_PORT", 8000)
 _default_siteurl = (
@@ -102,6 +102,7 @@ _default_siteurl = (
 )
 SITEURL = os.getenv("SITEURL", _default_siteurl)
 print("SITEURL: ", SITEURL)
+print("SITE_HOST_SCHEMA: ", SITE_HOST_SCHEMA)
 
 
 # we need hostname for deployed
