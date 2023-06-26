@@ -987,6 +987,7 @@ TOPICCATEGORY_MANDATORY = ast.literal_eval(os.environ.get("TOPICCATEGORY_MANDATO
 MISSING_THUMBNAIL = os.getenv("MISSING_THUMBNAIL", "geonode/img/missing_thumb.png")
 
 GEOSERVER_LOCATION = os.getenv("GEOSERVER_LOCATION", "http://localhost:8080/geoserver/")
+print("GEOSERVER_LOCATION", GEOSERVER_LOCATION)
 
 # add trailing slash to geoserver location url.
 if not GEOSERVER_LOCATION.endswith("/"):
