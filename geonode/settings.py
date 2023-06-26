@@ -101,6 +101,8 @@ _default_siteurl = (
     else f"{SITE_HOST_SCHEMA}://{SITE_HOST_NAME}/"
 )
 SITEURL = os.getenv("SITEURL", _default_siteurl)
+print("SITEURL: ", SITEURL)
+
 
 # we need hostname for deployed
 _surl = urlparse(SITEURL)
@@ -835,7 +837,7 @@ CORS_ALLOW_ALL_ORIGINS = ast.literal_eval(os.environ.get("CORS_ALLOW_ALL_ORIGINS
 X_FRAME_OPTIONS = os.environ.get("X_FRAME_OPTIONS", "DENY")
 SECURE_CONTENT_TYPE_NOSNIFF = ast.literal_eval(os.environ.get("SECURE_CONTENT_TYPE_NOSNIFF", "True"))
 SECURE_BROWSER_XSS_FILTER = ast.literal_eval(os.environ.get("SECURE_BROWSER_XSS_FILTER", "True"))
-SECURE_SSL_REDIRECT = ast.literal_eval(os.environ.get("SECURE_SSL_REDIRECT", "False"))
+SECURE_SSL_REDIRECT = ast.literal_eval(os.environ.get("SECURE_SSL_REDIRECT", "True"))
 SECURE_HSTS_SECONDS = int(os.getenv("SECURE_HSTS_SECONDS", "3600"))
 SECURE_HSTS_INCLUDE_SUBDOMAINS = ast.literal_eval(os.environ.get("SECURE_HSTS_INCLUDE_SUBDOMAINS", "True"))
 
@@ -1927,7 +1929,7 @@ if os.name == "nt":
 RESOURCE_PUBLISHING = ast.literal_eval(os.getenv("RESOURCE_PUBLISHING", "False"))
 
 # Each uploaded Dataset must be approved by an Admin before becoming visible
-ADMIN_MODERATE_UPLOADS = ast.literal_eval(os.environ.get("ADMIN_MODERATE_UPLOADS", "False"))
+ADMIN_MODERATE_UPLOADS = ast.literal_eval(os.environ.get("ADMIN_MODERATE_UPLOADS", "True"))
 
 # If this option is enabled, Resources belonging to a Group (with access private) won't be
 # visible by others
