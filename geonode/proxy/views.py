@@ -172,7 +172,7 @@ def proxy(
     # We parse and normalise such URLs into absolute paths before attempting
     # to proxy the request.
     _url = URL.from_text(_url).normalize().to_text()
-    print("_url", _url)
+
 
     if request.method == "GET" and access_token and "access_token" not in _url:
         query_separator = "&" if "?" in _url else "?"
@@ -187,6 +187,7 @@ def proxy(
         _url = _url.replace(f"{settings.SITEURL}geoserver", ogc_server_settings.LOCATION.rstrip("/"))
         _data = _data.replace(f"{settings.SITEURL}geoserver", ogc_server_settings.LOCATION.rstrip("/"))
 
+        print("_url", _url)
     response, content = http_client.request(
         _url, method=request.method, data=_data.encode("utf-8"), headers=headers, timeout=timeout, user=user
     )
