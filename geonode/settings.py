@@ -56,7 +56,7 @@ DEFAULT_CHARSET = "utf-8"
 # Defines the directory that contains the settings file as the PROJECT_ROOT
 # It is used for relative settings elsewhere.
 PROJECT_ROOT = os.path.abspath(os.path.dirname(__file__))
-print(f"PROJECT_ROOT: {PROJECT_ROOT}")
+# print(f"PROJECT_ROOT: {PROJECT_ROOT}")
 
 # Setting debug to true makes Django serve static media and
 # present pretty error pages.
