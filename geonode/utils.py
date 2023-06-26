@@ -1187,6 +1187,7 @@ class HttpClient:
         scheme = urlsplit(url).scheme
         scheme = scheme.replace("http", "https")
         scheme = scheme.replace("httpss", "https")
+
         session.mount(f"{scheme}://", adapter)
         session.verify = False
         action = getattr(session, method.lower(), None)
