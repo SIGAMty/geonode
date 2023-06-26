@@ -91,8 +91,11 @@ def proxy(
     raw_url = raw_url.replace('http', 'https') if settings.SITE_HOST_SCHEMA == 'https' else raw_url
     raw_url = urljoin(settings.SITEURL, raw_url) if raw_url.startswith("/") else raw_url
     url = urlsplit(raw_url)
+    print("url", url)
     scheme = str(url.scheme)
     locator = str(url.path)
+    print("locator", locator)
+    print("scheme", scheme)
     if url.query != "":
         locator += f"?{url.query}"
     if url.fragment != "":
