@@ -94,6 +94,7 @@ class GeoNodeUploader:
         **kwargs,
     ):
         self.host = host
+        print(f"Host: {self.host}")
         self.folder_path = folder_path
         self.username = username
         self.password = password
