@@ -88,6 +88,7 @@ def proxy(
         )
 
     raw_url = url or request.GET["url"]
+    raw_url = raw_url.replace('http', 'https') if settings.SITE_HOST_SCHEMA == 'https' else raw_url
     raw_url = urljoin(settings.SITEURL, raw_url) if raw_url.startswith("/") else raw_url
     url = urlsplit(raw_url)
     scheme = str(url.scheme)
