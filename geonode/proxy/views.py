@@ -164,7 +164,7 @@ def proxy(
         parsed = parsed._replace(scheme=site_url.scheme)
 
     _url = parsed.geturl()
-    print("_url", _url)
+
 
     # Some clients / JS libraries generate URLs with relative URL paths, e.g.
     # "http://host/path/path/../file.css", which the requests library cannot
@@ -172,6 +172,7 @@ def proxy(
     # We parse and normalise such URLs into absolute paths before attempting
     # to proxy the request.
     _url = URL.from_text(_url).normalize().to_text()
+    print("_url", _url)
 
     if request.method == "GET" and access_token and "access_token" not in _url:
         query_separator = "&" if "?" in _url else "?"
