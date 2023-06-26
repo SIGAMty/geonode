@@ -91,11 +91,8 @@ def proxy(
     raw_url = raw_url.replace('http', 'https') if settings.SITE_HOST_SCHEMA == 'https' else raw_url
     raw_url = urljoin(settings.SITEURL, raw_url) if raw_url.startswith("/") else raw_url
     url = urlsplit(raw_url)
-    print("url", url)
     scheme = str(url.scheme)
     locator = str(url.path)
-    print("locator", locator)
-    print("scheme", scheme)
     if url.query != "":
         locator += f"?{url.query}"
     if url.fragment != "":
@@ -167,6 +164,7 @@ def proxy(
         parsed = parsed._replace(scheme=site_url.scheme)
 
     _url = parsed.geturl()
+    print("_url", _url)
 
     # Some clients / JS libraries generate URLs with relative URL paths, e.g.
     # "http://host/path/path/../file.css", which the requests library cannot

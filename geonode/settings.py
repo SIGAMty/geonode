@@ -834,7 +834,7 @@ CORS_ALLOW_ALL_ORIGINS = ast.literal_eval(os.environ.get("CORS_ALLOW_ALL_ORIGINS
 X_FRAME_OPTIONS = os.environ.get("X_FRAME_OPTIONS", "DENY")
 SECURE_CONTENT_TYPE_NOSNIFF = ast.literal_eval(os.environ.get("SECURE_CONTENT_TYPE_NOSNIFF", "True"))
 SECURE_BROWSER_XSS_FILTER = ast.literal_eval(os.environ.get("SECURE_BROWSER_XSS_FILTER", "True"))
-SECURE_SSL_REDIRECT = ast.literal_eval(os.environ.get("SECURE_SSL_REDIRECT", "True"))
+SECURE_SSL_REDIRECT = ast.literal_eval(os.environ.get("SECURE_SSL_REDIRECT", "False"))
 SECURE_HSTS_SECONDS = int(os.getenv("SECURE_HSTS_SECONDS", "3600"))
 SECURE_HSTS_INCLUDE_SUBDOMAINS = ast.literal_eval(os.environ.get("SECURE_HSTS_INCLUDE_SUBDOMAINS", "True"))
 
