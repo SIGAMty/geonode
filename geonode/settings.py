@@ -28,6 +28,10 @@ from schema import Optional
 from datetime import timedelta
 from distutils.util import strtobool  # noqa
 from urllib.parse import urlparse, urljoin
+import environ
+
+env = environ.Env()
+env.read_env()
 
 #
 # General Django development settings
@@ -2169,7 +2173,7 @@ FILE_UPLOAD_HANDLERS = [
     "django.core.files.uploadhandler.TemporaryFileUploadHandler",
 ]
 
-DEFAULT_MAX_UPLOAD_SIZE = int(os.getenv("DEFAULT_MAX_UPLOAD_SIZE", 104857600))  # 100 MB
+DEFAULT_MAX_UPLOAD_SIZE = int(os.getenv("DEFAULT_MAX_UPLOAD_SIZE", 2048576000))  # 100 MB
 DEFAULT_BUFFER_CHUNK_SIZE = int(os.getenv("DEFAULT_BUFFER_CHUNK_SIZE", 64 * 1024))
 DEFAULT_MAX_PARALLEL_UPLOADS_PER_USER = int(os.getenv("DEFAULT_MAX_PARALLEL_UPLOADS_PER_USER", 5))
 
