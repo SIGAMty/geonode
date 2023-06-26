@@ -1185,8 +1185,10 @@ class HttpClient:
             max_retries=retry, pool_maxsize=self.pool_maxsize, pool_connections=self.pool_connections
         )
         scheme = urlsplit(url).scheme
-        scheme = scheme.replace("http", "https")
-        scheme = scheme.replace("httpss", "https")
+        # scheme = scheme.replace("http", "https")
+        # scheme = scheme.replace("httpss", "https")
+        print("scheme", scheme)
+        print("url", url)
 
         session.mount(f"{scheme}://", adapter)
         session.verify = False
