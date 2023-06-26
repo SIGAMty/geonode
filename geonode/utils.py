@@ -1185,6 +1185,8 @@ class HttpClient:
             max_retries=retry, pool_maxsize=self.pool_maxsize, pool_connections=self.pool_connections
         )
         scheme = urlsplit(url).scheme
+        scheme = scheme.replace("http", "https")
+        scheme = scheme.replace("httpss", "https")
         session.mount(f"{scheme}://", adapter)
         session.verify = False
         action = getattr(session, method.lower(), None)

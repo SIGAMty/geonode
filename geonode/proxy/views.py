@@ -88,7 +88,7 @@ def proxy(
         )
 
     raw_url = url or request.GET["url"]
-    raw_url = raw_url.replace('http', 'https') if settings.SITE_HOST_SCHEMA == 'https' else raw_url
+    # raw_url = raw_url.replace('http', 'https') if settings.SITE_HOST_SCHEMA == 'https' else raw_url
     raw_url = urljoin(settings.SITEURL, raw_url) if raw_url.startswith("/") else raw_url
     url = urlsplit(raw_url)
     scheme = str(url.scheme)
@@ -116,8 +116,7 @@ def proxy(
             if (
                 len(ows_tokens) == 4
                 and "version" == ows_tokens[0]
-                and StrictVersion(ows_tokens[1]) >= StrictVersion("1.0.0")
-                and StrictVersion(ows_tokens[1]) <= StrictVersion("3.0.0")
+                and StrictVersion("1.0.0") <= StrictVersion(ows_tokens[1]) <= StrictVersion("3.0.0")
                 and ows_tokens[2].lower() in ("getcapabilities")
                 and ows_tokens[3].upper() in ("OWS", "WCS", "WFS", "WMS", "WPS", "CSW")
             ):
@@ -165,7 +164,6 @@ def proxy(
 
     _url = parsed.geturl()
 
-
     # Some clients / JS libraries generate URLs with relative URL paths, e.g.
     # "http://host/path/path/../file.css", which the requests library cannot
     # currently handle (https://github.com/kennethreitz/requests/issues/2982).
@@ -173,15 +171,11 @@ def proxy(
     # to proxy the request.
     _url = URL.from_text(_url).normalize().to_text()
 
-
     if request.method == "GET" and access_token and "access_token" not in _url:
         query_separator = "&" if "?" in _url else "?"
         _url = f"{_url}{query_separator}access_token={access_token}"
 
-    print("data", request)
-    print("data", dir(request))
-    _data = "request.data" # .body # .decode("utf-8")
-
+    _data = request.body.decode("utf-8")
 
     # Avoid translating local geoserver calls into external ones
     if check_ogc_backend(geoserver.BACKEND_PACKAGE):
@@ -190,7 +184,6 @@ def proxy(
         _url = _url.replace(f"{settings.SITEURL}geoserver", ogc_server_settings.LOCATION.rstrip("/"))
         _data = _data.replace(f"{settings.SITEURL}geoserver", ogc_server_settings.LOCATION.rstrip("/"))
 
-        print("_url", _url)
     response, content = http_client.request(
         _url, method=request.method, data=_data.encode("utf-8"), headers=headers, timeout=timeout, user=user
     )
