@@ -987,7 +987,6 @@ TOPICCATEGORY_MANDATORY = ast.literal_eval(os.environ.get("TOPICCATEGORY_MANDATO
 MISSING_THUMBNAIL = os.getenv("MISSING_THUMBNAIL", "geonode/img/missing_thumb.png")
 
 GEOSERVER_LOCATION = os.getenv("GEOSERVER_LOCATION", "http://localhost:8080/geoserver/")
-print("GEOSERVER_LOCATION", GEOSERVER_LOCATION)
 
 # add trailing slash to geoserver location url.
 if not GEOSERVER_LOCATION.endswith("/"):
@@ -1277,6 +1276,8 @@ except ValueError:
         if os.getenv("PROXY_ALLOWED_HOSTS") is None
         else re.split(r" *[,|:;] *", os.getenv("PROXY_ALLOWED_HOSTS"))
     )
+
+print("PROXY_ALLOWED_HOSTS: ", PROXY_ALLOWED_HOSTS)
 
 # The proxy to use when making cross origin requests.
 PROXY_URL = os.environ.get("PROXY_URL", "/proxy/?url=")
