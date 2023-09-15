@@ -618,6 +618,7 @@ def get_dataset_capabilities(layer, version="1.3.0", access_token=None):
         DeprecationWarning,
     )
     wms_url = get_dataset_capabilities_url(layer, version, access_token)
+    wms_url = wms_url.replace(f"{layer}/", "").split('&access_token')[0]
 
     _user, _password = ogc_server_settings.credentials
     req, content = http_client.get(wms_url, user=_user)

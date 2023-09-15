@@ -314,10 +314,10 @@ span.grippy::after {
                                     </div>
                                 {% endblock doc_title %}
                                 {% block doc_links %}
-                                    <div id="req_item">                                  
+                                    <!-- <div id="req_item">                                  
                                       <span><label for="{{ document_form.title|id }}">{{ document_form.links.label }}</label></span>
                                       {{ document_form.links }}
-                                    </div>
+				    </div> -->
                                 {% endblock doc_links %}
                                 {% block doc_abstract %}
                                     <div id="req_item">
@@ -596,10 +596,18 @@ span.grippy::after {
                 <div class="panel panel-default" >
                   <div class="panel-heading">{% trans "Publishing" %}</div>
                   <div class="panel-body">
+			  {% if user.is_superuser or user.can_replace_documents or resource.owner == user and not resource.is_approved and not resource.is_published %}
+			  <div>
+				  <!-- {{ resource.owner }} {{ user }} {{ user.is_superuser }} {{ resource.is_approved }} {{ resource.is_published }} -->
+				  <p><a href="/documents/{{ resource.id }}/replace">Remplazar archivo</a></p>
+			  </div>
+			  {% endif %}
+                    {% if user.is_superuser %}
                     <div>
                         <span><label for="{{ document_form.metadata_uploaded_preserve|id }}">{{ document_form.metadata_uploaded_preserve.label }}</label></span>
                         {{ document_form.metadata_uploaded_preserve }}
                     </div>
+                    {% endif %}
                     <div>
                         <span><label for="{{ document_form.is_approved|id }}">{{ document_form.is_approved.label }}</label></span>
                         {{ document_form.is_approved }}

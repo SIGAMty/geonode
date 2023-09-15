@@ -21,7 +21,7 @@ from django.contrib import admin
 
 from modeltranslation.admin import TabbedTranslationAdmin
 
-from geonode.documents.models import Document
+from geonode.documents.models import Document, DocumentStaff
 from geonode.base.admin import ResourceBaseAdminForm
 from geonode.base.admin import metadata_batch_edit
 
@@ -29,6 +29,7 @@ from geonode.base.admin import metadata_batch_edit
 class DocumentAdminForm(ResourceBaseAdminForm):
     class Meta(ResourceBaseAdminForm.Meta):
         model = Document
+        # exclude = ['keywords']
         fields = "__all__"
         # exclude = (
         #     'resource',
@@ -69,5 +70,19 @@ class DocumentAdmin(TabbedTranslationAdmin):
 
             resource_manager.delete(obj.uuid, instance=obj)
 
+
+@admin.register(DocumentStaff)
+class DocumentStaffAdmin(DocumentAdmin):
+    def get_queryset(self, request):
+        """
+        Filter documents by user groups
+        """
+        qs = Document.objects.all()
+        if request.user.is_superuser:
+            return qs
+        elif request.user.is_staff:
+            return qs.filter(owner=request.user)
+        else:
+            return qs.none()
 
 admin.site.register(Document, DocumentAdmin)

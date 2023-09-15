@@ -185,7 +185,6 @@ def proxy(
         _data = _data.replace(f"{settings.SITEURL}geoserver", ogc_server_settings.LOCATION.rstrip("/"))
 
     # Proxy the request
-    print("_url", _url)
     response, content = http_client.request(
         _url, method=request.method, data=_data.encode("utf-8"), headers=headers, timeout=timeout, user=user
     )

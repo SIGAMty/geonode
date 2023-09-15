@@ -373,7 +373,7 @@ class HierarchicalKeyword(TagBase, MP_Node):
 
 
 class TaggedContentItem(ItemBase):
-    content_object = models.ForeignKey("ResourceBase", on_delete=models.CASCADE)
+    content_object = models.ForeignKey("ResourceBase", on_delete=models.CASCADE, null=True, blank=True)
     tag = models.ForeignKey("HierarchicalKeyword", related_name="keywords", on_delete=models.CASCADE)
 
     # see https://github.com/alex/django-taggit/issues/101

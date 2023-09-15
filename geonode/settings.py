@@ -152,6 +152,7 @@ DATABASES = {"default": _db_conf}
 
 if os.getenv("DEFAULT_BACKEND_DATASTORE"):
     GEODATABASE_URL = os.getenv("GEODATABASE_URL", "postgis://geonode_data:geonode_data@localhost:5432/geonode_data",)
+    # GEODATABASE_URL = "postgis://godgeo_geonode:wCjFOn4kRfhBm1UgCHrgySOIzYvxItugvceq@10.23.1.12:5432/godgeo_geonode41x_data"
     DATABASES[os.getenv("DEFAULT_BACKEND_DATASTORE")] = dj_database_url.parse(GEODATABASE_URL, conn_max_age=GEONODE_DB_CONN_MAX_AGE)
     _geo_db = DATABASES[os.getenv("DEFAULT_BACKEND_DATASTORE")]
     if "CONN_TOUT" in DATABASES["default"]:
@@ -161,6 +162,7 @@ if os.getenv("DEFAULT_BACKEND_DATASTORE"):
         _geo_db["OPTIONS"].update({"connect_timeout": GEONODE_DB_CONN_TOUT,})
 
     DATABASES[os.getenv("DEFAULT_BACKEND_DATASTORE")] = _geo_db
+
 
 # If set to 'True' it will refresh/regenrate all resource links everytime a 'migrate' will be performed
 UPDATE_RESOURCE_LINKS_AT_MIGRATE = ast.literal_eval(os.getenv("UPDATE_RESOURCE_LINKS_AT_MIGRATE", "False"))
@@ -908,6 +910,7 @@ AUTH_EXEMPT_URLS = (
     f"{FORCE_SCRIPT_NAME}/gs/*",
     f"{FORCE_SCRIPT_NAME}/account/*",
     f"{FORCE_SCRIPT_NAME}/static/*",
+    f"{FORCE_SCRIPT_NAME}/people/profile/*",
     f"{FORCE_SCRIPT_NAME}/api/o/*",
     f"{FORCE_SCRIPT_NAME}/api/roles",
     f"{FORCE_SCRIPT_NAME}/api/adminRole",

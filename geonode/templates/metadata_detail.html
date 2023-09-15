@@ -427,10 +427,10 @@
         <dd><a href="{{ resource.get_absolute_url }}">{{ resource.get_absolute_url }}</a></dd>
         {% endblock get_absolute_url %}
 
-        {% block metaget_absolute_url %}
+        <!-- {% block metaget_absolute_url %}
         <dt>{% trans "Metadata Page" %}</dt>
         <dd><a href="{{ resource.get_absolute_url }}/metadata_detail">{{ resource.get_absolute_url }}/metadata_detail</a></dd>
-        {% endblock metaget_absolute_url %}
+	{% endblock metaget_absolute_url %} -->
 
         {% block doc_file %}
         {% if resource.doc_file %}

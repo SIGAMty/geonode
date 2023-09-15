@@ -150,6 +150,13 @@ class Document(ResourceBase):
         pass
 
 
+class DocumentStaff(Document):
+    class Meta(Document.Meta):
+        proxy = True
+        verbose_name = _("Documento Staff")
+        verbose_name_plural = _("Documentos Staff")
+
+
 class DocumentResourceLink(models.Model):
     # relation to the document model
     document = models.ForeignKey(Document, null=True, blank=True, related_name="links", on_delete=models.CASCADE)

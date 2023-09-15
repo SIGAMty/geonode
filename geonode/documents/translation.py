@@ -18,7 +18,7 @@
 #########################################################################
 
 from modeltranslation.translator import translator, TranslationOptions
-from geonode.documents.models import Document
+from geonode.documents.models import Document, DocumentStaff
 
 
 class DocumentTranslationOptions(TranslationOptions):
@@ -33,3 +33,4 @@ class DocumentTranslationOptions(TranslationOptions):
 
 
 translator.register(Document, DocumentTranslationOptions)
+translator.register(DocumentStaff, DocumentTranslationOptions)

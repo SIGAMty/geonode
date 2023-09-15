@@ -168,6 +168,10 @@ class Profile(AbstractUser):
         return [kw.name for kw in self.keywords.all()]
 
     @property
+    def can_replace_documents(self):
+        return self.groups.filter(id=4).exists()
+
+    @property
     def name_long(self):
         if self.first_name and self.last_name:
             return f"{self.first_name} {self.last_name} ({self.username})"

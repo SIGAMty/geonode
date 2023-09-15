@@ -30,7 +30,7 @@ from django.contrib import messages
 from django.shortcuts import render, get_object_or_404
 from django.forms.utils import ErrorList
 from django.utils.translation import ugettext as _
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, permission_required
 from django.template import loader
 from django.views.generic.edit import CreateView, UpdateView
 from django.http import HttpResponse, HttpResponseRedirect, Http404
@@ -243,13 +243,23 @@ class DocumentUploadView(CreateView):
         else:
             return HttpResponseRedirect(url)
 
-
+# @permission_required(perm=self.object.owner==request.user, login_url='https://geonode.appsmty.gob.mx/account/login/')
 class DocumentUpdateView(UpdateView):
     template_name = "documents/document_replace.html"
     pk_url_kwarg = "docid"
     form_class = DocumentReplaceForm
     queryset = Document.objects.all()
     context_object_name = "document"
+
+    def get(self, request, *args, **kwargs):
+        print(self)
+        print(request)
+        obj = self.get_object()
+        print(obj.owner)
+        print(request.user)
+        if (obj.owner == request.user and not obj.is_published and not obj.is_approved) or request.user.is_superuser or request.user.can_replace_documents:
+            return super().get(request, *args, **kwargs)
+        return HttpResponseRedirect('/')
 
     def post(self, request, *args, **kwargs):
         self.object = self.get_object()
